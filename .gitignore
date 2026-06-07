@@ -1,0 +1,14 @@
+# Environments & Dependencies
+venv/
+node_modules/
+__pycache__/
+*.pyc
+
+# Security & Secrets
+.env
+.env.local
+
+# Build outputs
+dist/
+build/
+.DS_Store

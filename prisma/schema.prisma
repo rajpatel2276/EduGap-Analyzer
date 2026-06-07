@@ -1,0 +1,53 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+model EngineeringDomain {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique
+  keywords    SkillKeyword[] 
+  syllabi     Syllabus[]
+  jobListings JobListing[]
+}
+
+model University {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  state    String
+  syllabi  Syllabus[]
+}
+
+model SkillKeyword {
+  id          Int               @id @default(autoincrement())
+  category    String            
+  term        String            
+  marketWeight Float
+  domainId    Int
+  domain      EngineeringDomain @relation(fields: [domainId], references: [id])
+}
+
+model Syllabus {
+  id            Int               @id @default(autoincrement())
+  raw_text      String
+  universityId  Int
+  university    University        @relation(fields: [universityId], references: [id])
+  domainId      Int
+  domain        EngineeringDomain @relation(fields: [domainId], references: [id])
+  dateScraped   DateTime          @default(now())
+}
+
+model JobListing {
+  id          Int               @id @default(autoincrement())
+  title       String
+  description String
+  marketScore Float?
+  domainId    Int
+  domain      EngineeringDomain @relation(fields: [domainId], references: [id])
+  dateScraped DateTime          @default(now())
+}
